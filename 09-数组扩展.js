@@ -257,4 +257,157 @@
 
 /**
  * 新增扩展方法：Array.of()
+ * Array.of方法用于将一组值，转换为数组。
+ * 这个方法的主要目的，是弥补数组构造函数Array()的不足。因为参数个数的不同，会导致Array()的行为有差异。
  */
+{
+  // 基础案例
+  {
+    let a = Array.of(1,2,3);
+    // console.log(a);
+  }
+
+  // Array.of方法可以用下面的代码模拟实现。
+  {
+    function ArrayOf() {
+      return [].slice.call(arguments)
+    }
+  }
+
+  /*
+   * Array()的行为：
+   * Array方法没有参数、一个参数、三个参数时，返回结果都不一样。只有当参数个数不少于 2 个时，
+   * Array()才会返回由参数组成的新数组。参数个数只有一个时，实际上是指定数组的长度。
+   */
+}
+
+/**
+ * 数组实例的 copyWithin()
+ * 数组实例的copyWithin()方法，在当前数组内部，将指定位置的成员复制到其他位置（会覆盖原有成员），
+ * 然后返回当前数组。也就是说，使用这个方法，会修改当前数组。
+ */
+{
+  // 基础案例
+  {
+    let a = [0,1,2,3,4].copyWithin(0,3);
+    // console.log(a);
+  }
+}
+
+/**
+ * 数组实例的 find() 和 findIndex()
+ * 数组实例的find方法，用于找出第一个符合条件的数组成员。它的参数是一个回调函数，
+ * 所有数组成员依次执行该回调函数，直到找出第一个返回值为true的成员，然后返回该成员。
+ * 如果没有符合条件的成员，则返回undefined。
+ */
+{
+  // find()基本案例
+  {
+    let a = [1, 4, -5, 10].find((n) => n === 0);
+    // console.log(a);
+  }
+  /**
+   * findIndex()基本案例
+   * find方法的回调函数可以接受三个参数，依次为当前的值、当前的位置和原数组。
+   */
+  {
+    let a = [1, 5, 10, 15].findIndex(function(value, index, arr) {
+      return value > 9;
+    });
+    // console.log(a);
+  }
+
+  // 两个方法都可以接受第二个参数，用来绑定回调函数的this对象
+  {
+    // 下面的代码中，find函数接收了第二个参数person对象，回调函数中的this对象指向person对象。
+    function f(v){
+      return v > this.age;
+    }
+    let person = {name: 'John', age: 20};
+    [10, 12, 26, 15].find(f, person);    // 26
+  }
+}
+
+/**
+ * 数组实例的 fill()
+ * fill方法使用给定值，填充一个数组。
+ */
+{
+  // 基础案例
+  {
+    // fill方法用于空数组的初始化非常方便。数组中已有的元素，会被全部抹去。
+    let a = ['a', 'b', 'c'].fill(7);
+    // console.log(a);
+    let b = new Array(3).fill(6);
+    // console.log(b);
+  }
+}
+
+/**
+ * 数组实例的 entries()，keys() 和 values()
+ * ES6 提供三个新的方法——entries()，keys()和values()——用于遍历数组。它们都返回一个遍历器对象（详见《Iterator》一章），
+ * 可以用for...of循环进行遍历，唯一的区别是keys()是对键名的遍历、values()是对键值的遍历，entries()是对键值对的遍历。
+ */
+{
+  // keys()、entries()、values()基本案例
+  {
+    let arr1 = ['小明','小红','小绿','小蓝'];
+    // console.log([...arr1.keys()]);
+    // console.log([...arr1.values()]);
+    // console.log([...arr1.entries()]);
+    for (let index of arr1.values()) {
+      // console.log(index);
+    }
+  }
+
+}
+
+/**
+ * 数组实例的 includes()
+ * Array.prototype.includes方法返回一个布尔值，表示某个数组是否包含给定的值，与字符串的includes方法类似。
+ */
+{
+  // 基本案例
+  {
+    // [1, 2, 3].includes(2)     // true
+    // [1, 2, 3].includes(4)     // false
+    // [1, 2, NaN].includes(NaN) // true
+  }
+  /**
+   * Map 和 Set 数据结构有一个has方法，需要注意与includes区分
+   * Map 结构的has方法，是用来查找键名的，比如Map.prototype.has(key)、WeakMap.prototype.has(key)、Reflect.has(target, propertyKey)。
+   * Set 结构的has方法，是用来查找值的，比如Set.prototype.has(value)、WeakSet.prototype.has(value)。
+   */
+}
+
+/**
+ * 数组实例的 flat()，flatMap()
+ */
+{
+  // 数组的成员有时还是数组，Array.prototype.flat()用于将嵌套的数组“拉平”，变成一维的数组。该方法返回一个新数组，对原数据没有影响。
+  {
+    // let a = ;
+    // console.log([1, 2, [3, 4]].flat());
+  }
+}
+
+/**
+ * 数组的空位
+ */
+{
+
+}
+
+/**
+ * Array.prototype.sort() 的排序稳定性
+ * 排序稳定性（stable sorting）是排序算法的重要属性，指的是排序关键字相同的项目，排序前后的顺序不变。
+ * 常见的排序算法之中，插入排序、合并排序、冒泡排序等都是稳定的，堆排序、快速排序等是不稳定的。
+ * 不稳定排序的主要缺点是，多重排序时可能会产生问题。假设有一个姓和名的列表，要求按照“姓氏为主要关键字，
+ * 名字为次要关键字”进行排序。开发者可能会先按名字排序，再按姓氏进行排序。如果排序算法是稳定的，
+ * 这样就可以达到“先姓氏，后名字”的排序效果。如果是不稳定的，就不行。早先的 ECMAScript 没有规定，
+ * Array.prototype.sort()的默认排序算法是否稳定，留给浏览器自己决定，这导致某些实现是不稳定的。ES2019 明确规定，
+ * Array.prototype.sort()的默认排序算法必须稳定。这个规定已经做到了，现在 JavaScript 各个主要实现的默认排序算法都是稳定的。
+ */
+{
+
+}
