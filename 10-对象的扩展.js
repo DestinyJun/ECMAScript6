@@ -197,4 +197,177 @@
 
 /**
  * 对象的解构赋值
+ * 对象的解构赋值用于从一个对象取值，相当于将目标对象自身的所有可遍历的（enumerable）、
+ * 但尚未被读取的属性，分配到指定的对象上面。所有的键和它们的值，都会拷贝到新对象上面。
+ * （1）由于解构赋值要求等号右边是一个对象，所以如果等号右边是undefined或null，就会报错，因为它们无法转为对象。
+ * （2）解构赋值必须是最后一个参数，否则会报错。
+ * （3）扩展运算符的解构赋值，不能复制继承自原型对象的属性
  */
+{
+  // 基本案例
+  {
+    let a = { x, y, ...z } = { x: 1, y: 2, a: 3, b: 4 };
+    // console.log(a);
+  }
+  // 案例2
+  {
+    const o = Object.create({ x: 1, y: 2 });
+    // o.z = 3;
+    // console.log(o);
+  }
+}
+
+/**
+ * 对象的扩展运算符
+ * 对象的扩展运算符（...）用于取出参数对象的所有可遍历属性，拷贝到当前对象之中。
+ * 注意条例：
+ * （1）如果扩展运算符后面是一个空对象，则没有任何效果。
+ * （2）如果扩展运算符后面不是对象，则会自动将其转为对象。
+ */
+{
+  // 基本案例
+  {
+    let z = { a: 3, b: 4 };
+    let n = { ...z };
+    // console.log(n);
+  }
+
+  // 由于数组是特殊的对象，所以对象的扩展运算符也可以用于数组。
+  {
+    let foo = { ...['a', 'b', 'c'] };
+    // console.log(foo);
+  }
+
+  // 如果扩展运算符后面是字符串，它会自动转成一个类似数组的对象，因此返回的不是空对象。
+  {
+    let a = {...'hello'};
+    // console.log(a);
+  }
+
+  // 对象的扩展运算符等同于使用Object.assign()方法。如果原来的目标对象的属性有跟源对象的属性一致，那么目标对象的属性的值会被源属性的值覆盖
+  {
+    let a = {x:1,y:2,c:3};
+    let aClone1 = { ...a };
+    // console.log(aClone1);
+    let b = {x:1000};
+    b = Object.assign({},a);
+    // console.log(b);
+  }
+
+  // 如果想完整克隆一个对象，还拷贝对象原型的属性，可以采用下面的三种写法。
+  {
+    let obj = {a:1,b:2,c:3};
+    obj. __proto__ = {d:4};
+    // 写法一
+    const clone1 = {
+      __proto__: Object.getPrototypeOf(obj),
+      ...obj
+    };
+    // console.log(clone1.__proto__.d);
+
+    // 写法二
+    const clone2 = Object.assign(
+      Object.create(Object.getPrototypeOf(obj)),
+      obj
+    );
+    // console.log(clone2.__proto__.d);
+
+    // 写法三
+    const clone3 = Object.create(
+      Object.getPrototypeOf(obj),
+      Object.getOwnPropertyDescriptors(obj)
+    );
+    // console.log(clone3);
+    let clone4 = Object.getOwnPropertyDescriptors(obj);
+    // console.log(clone4.a);
+  }
+
+  // 扩展运算符可以用于合并两个对象。
+  {
+    let a = {a:1,b:2};
+    let b = {c:3,d:4};
+    let c = {...a,...b};
+    // console.log(c);
+    let d = Object.assign({},a,b);
+    // console.log(d);
+  }
+
+  // 如果用户自定义的属性，放在扩展运算符后面，则扩展运算符内部的同名属性会被覆盖掉。
+  {
+    let a = {x:100,y:200};
+    let b = {c:3,d:4};
+    let c = {...a,...b};
+    // 第一种覆盖方式
+    let aWithOverrides1 = { ...a, x: 1, y: 2 };
+    // console.log(aWithOverrides);
+
+    // 第二种覆盖方式
+    let aWithOverrides2 = { ...a, ...{ x: 1, y: 2 } };
+    // console.log(aWithOverrides2);
+
+    // 第三种覆盖方式
+    let aWithOverrides3 = Object.assign({}, a, { x: 1, y: 2 });
+    // console.log(aWithOverrides3);
+  }
+
+  // 如果把自定义属性放在扩展运算符前面，就变成了设置新对象的默认属性值。
+  {
+    let a = {x:100,y:200};
+    let b = {c:3,d:4};
+    let c = {...a,...b};
+    // 一下三种写法等价
+    let aWithDefaults1 = { x: 1, y: 2, ...a };
+    let aWithDefaults2 = Object.assign({}, { x: 1, y: 2 }, a);
+    let aWithDefaults3 = Object.assign({ x: 1, y: 2 }, a);
+    // console.log(aWithDefaults1);
+  }
+
+  // 与数组的扩展运算符一样，对象的扩展运算符后面可以跟表达式。
+  {
+    let x = 3;
+    const obj = {
+      ...(x > 1 ? {a: 1} : {}),
+      b: 2,
+    };
+    console.log(obj);
+  }
+}
+
+/**
+ * 链判断运算符
+ * 链判断运算符有三种用法：
+ * （1）obj?.prop 对象属性
+ * （2）obj?.[expr] 同上
+ * （3）func?.(...args) 函数或对象方法的调用
+ */
+{
+  // 基本案例
+  {
+    let message = {
+      body: {
+        user:{
+          firstName: '文君'
+        }
+      }
+    };
+    // const firstName = message?.body?.user?.firstName || 'default';
+    // console.log(firstName);
+  }
+}
+
+/**
+ * Null 判断运算符
+ * 读取对象属性的时候，如果某个属性的值是null或undefined，有时候需要为它们指定默认值。常见做法是通过||运算符指定默认值。
+ */
+{
+  // 基本案例
+  {
+    let response = {
+      settings:{
+        headerText:null,
+      }
+    };
+    // const headerText = response.settings.headerText ?? 'Hello, world!';
+    // console.log(headerText);
+  }
+}
