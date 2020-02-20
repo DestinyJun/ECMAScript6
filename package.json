@@ -20,5 +20,6 @@
   "bugs": {
     "url": "https://github.com/DestinyJun/ECMAScript6/issues"
   },
-  "homepage": "https://github.com/DestinyJun/ECMAScript6#readme"
+  "homepage": "https://github.com/DestinyJun/ECMAScript6#readme",
+  "type": "module"
 }

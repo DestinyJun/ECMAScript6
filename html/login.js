@@ -4,8 +4,8 @@
 }*/
 
 // 或者写成
-function foo() {
+/*function foo() {
   console.log('foo');
-}
+}*/
 
-export default foo;
+export default 45;
