@@ -130,11 +130,174 @@
  * require命令不能加载.mjs文件，会报错，只有import命令才可以加载.mjs文件。反过来，.mjs文件里
  * 面也不能使用require命令，必须使用import。
  */
-import {count} from "./Module/abc.js";
+// import {count} from "./Module/abc.js";
 {
  // 基本案例
   {
-    console.log(count);
+    // console.log(count);
+  }
+}
+
+/**
+ * main 字段：
+ * （1）package.json文件有两个字段可以指定模块的入口文件：main和exports。比较简单的模块，
+ * 可以只使用main字段，指定模块加载的入口文件。指定项目的入口脚本为./src/index.js，它的格式为
+ * ES6 模块。如果没有type字段，index.js就会被解释为 CommonJS 模块。然后，import命令就可以加载
+ * 这个模块。这时，如果用 CommonJS 模块的require()命令去加载es-module-package模块会报错，
+ * 因为 CommonJS 模块不能处理export命令。
+ */
+// import {add} from "./Module/es-module";
+{
+  // 基本案例
+  {
+    // add();
+  }
+}
+
+/**
+ * exports 字段：exports字段的优先级高于main字段。它有多种用法。
+ * （1）子目录别名：package.json文件的exports字段可以指定脚本或子目录的别名。
+ * （2）exports字段的别名如果是.，就代表模块的主入口，优先级高于main字段，
+ * 并且可以直接简写成exports字段的值。
+ * （3）条件加载：利用.这个别名，可以为 ES6 模块和 CommonJS 指定不同的入口。
+ * 目前，这个功能需要在 Node.js 运行的时候，打开--experimental-conditional-exports标志。
+ */
+// import {submodule} from "./Module/es-module/src/submodule";
+
+{
+  // 子目录别名：package.json文件的exports字段可以指定脚本或子目录的别名。
+  {
+    // submodule();
+  }
+
+  // 条件加载，在package.json种加入如下代码
+  {
+   /* {
+      "type": "module",
+      "exports": {
+      ".": {
+        "require": "./main.cjs",
+          "default": "./main.js"
+      }
+    }
+
+    //简写版本，注意，如果同时还有其他别名，就不能采用简写，否则或报错。
+      {
+        "exports": {
+          "require": "./main.cjs",
+          "default": "./main.js"
+        }
+      }
+    }*/
+   // 上面代码中，别名.的require条件指定require()命令的入口文件（即 CommonJS 的入口），
+    // default条件指定其他情况的入口（即 ES6 的入口）。
+
+  }
+}
+
+/**
+ * ES6 模块加载 CommonJS 模块:
+ * （1）一个模块同时支持 ES6 和 CommonJS 两种格式的常见方法是，package.json文件的
+ * main字段指定 CommonJS 入口，给 Node.js 使用；module字段指定 ES6 模块入口，给打包工具
+ * 使用，因为 Node.js 不认识module字段。
+ * （2）注意：import命令加载 CommonJS 模块，只能整体加载，不能只加载单一的输出项。
+ */
+
+/**
+ * node.js 的内置模块可以整体加载，也可以加载指定的输出项。
+ */
+// import EventEmitter from 'events'
+{
+  // 整体加载
+  {
+    // const e = new EventEmitter();
+    // console.log(e);
+  }
+
+  // 加载指定的输出项
+    /*import { readFile } from 'fs';
+    readFile('./foo.txt', (err, source) => {
+      if (err) {
+        console.error(err);
+      } else {
+        console.log(source);
+      }
+    });*/
+}
+
+/**
+ * 加载路径：
+ * （1）ES6 模块的加载路径必须给出脚本的完整路径，不能省略脚本的后缀名。import命令
+ * 和package.json文件的main字段如果省略脚本的后缀名，会报错。（这里注意，如果在
+ * package种定义了入口模块路径，那么在使用模块导入的时候就无需模块文件后缀）
+ * （2）为了与浏览器的import加载规则相同，Node.js 的.mjs文件支持 URL 路径。
+ */
+{
+  // 为了与浏览器的import加载规则相同，Node.js 的.mjs文件支持 URL 路径。
+  {
+    // import './foo.mjs?query=1'; // 加载 ./foo 传入参数 ?query=1
+    // 上面代码中，脚本路径带有参数?query=1，Node 会按 URL 规则解读。同一个脚本只
+    // 要参数不同，就会被加载多次，并且保存成不同的缓存。由于这个原因，只要文件名
+    // 中含有:、%、#、?等特殊字符，最好对这些字符进行转义。目前，Node.js 的import
+    // 命令只支持加载本地模块（file:协议）和data:协议，不支持加载远程模块。另外，
+    // 脚本路径只支持相对路径，不支持绝对路径（即以/或//开头的路径）。最后，Node
+    // 的import命令是异步加载，这一点与浏览器的处理方法相同。
+  }
+
+}
+
+/**
+ * 内部变量：
+ * ES6 模块应该是通用的，同一个模块不用修改，就可以用在浏览器环境和服务器环境。为了
+ * 达到这个目标，Node 规定 ES6 模块之中不能使用 CommonJS 模块的特有的一些内部变量。
+ * 首先，就是this关键字。ES6 模块之中，顶层的this指向undefined；CommonJS 模块的顶
+ * 层this指向当前模块，这是两者的一个重大差异。其次，以下这些顶层变量在 ES6 模块之
+ * 中都是不存在的。
+ * *** arguments
+ * *** require
+ * *** module
+ * *** exports
+ * *** __filename
+ * *** __dirname
+ */
+
+/**
+ * 循环加载：
+ * （1）“循环加载”（circular dependency）指的是，a脚本的执行依赖b脚本，而b脚本
+ * 的执行又依赖a脚本。通常，“循环加载”表示存在强耦合，如果处理不好，还可能导致
+ * 递归加载，使得程序无法执行，因此应该避免出现。但是实际上，这是很难避免的，尤其
+ * 是依赖关系复杂的大项目，很容易出现a依赖b，b依赖c，c又依赖a这样的情况。这意味着，
+ * 模块加载机制必须考虑“循环加载”的情况。对于 JavaScript 语言来说，目前最常见的
+ * 两种模块格式 CommonJS 和 ES6，处理“循环加载”的方法是不一样的，返回的结果也
+ * 不一样。
+ *（2）CommonJS 模块的加载原理：CommonJS 的一个模块，就是一个脚本文件。require命
+ * 令第一次加载该脚本，就会执行整个脚本，然后在内存生成一个对象。
+ * （3）CommonJS 模块的循环加载：CommonJS 模块的重要特性是加载时执行，即脚本代码在
+ * require的时候，就会全部执行。一旦出现某个模块被"循环加载"，就只输出已经执行的部分，
+ * 还未执行的部分不会输出。知道循环加载结束，在交还代码执行权，总之，CommonJS 输入的
+ * 是被输出值的拷贝，不是引用。另外，由于 CommonJS 模块遇到循环加载时，返回的是当前
+ * 已经执行的部分的值，而不是代码全部执行后的值，两者可能会有差异。所以，输入变量的
+ * 时候，必须非常小心。
+ * （4）ES6 模块的循环加载：ES6 处理“循环加载”与 CommonJS 有本质的不同。ES6 模块是
+ * 动态引用，如果使用import从一个模块加载变量（即import foo from 'foo'），那些变量不
+ * 会被缓存，而是成为一个指向被加载模块的引用，需要开发者自己保证，真正取值的时候能
+ * 够取到值。
+ */
+{
+  // require命令第一次加载该脚本，就会执行整个脚本，然后在内存生成一个对象。
+  {
+   /* {
+      id: '...',
+        exports: { ... },
+      loaded: true,
+    ...
+    }*/
+    // 上面代码就是 Node 内部加载模块后生成的一个对象。该对象的id属性是模块名，exports
+    // 属性是模块输出的各个接口，loaded属性是一个布尔值，表示该模块的脚本是否执行完毕。
+    // 其他还有很多属性，这里都省略了。以后需要用到这个模块的时候，就会到exports属性上
+    // 面取值。即使再次执行require命令，也不会再次执行该模块，而是到缓存之中取值。也就
+    // 是说，CommonJS 模块无论加载多少次，都只会在第一次加载时运行一次，以后再加载，就
+    // 返回第一次运行的结果，除非手动清除系统缓存。
   }
 }
 

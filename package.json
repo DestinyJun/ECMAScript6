@@ -2,7 +2,6 @@
   "name": "ecmascript6",
   "version": "1.0.0",
   "description": "",
-  "main": "02-object.js",
   "dependencies": {
     "esm": "^3.2.25",
     "jquery": "^3.4.1"
@@ -20,6 +19,5 @@
   "bugs": {
     "url": "https://github.com/DestinyJun/ECMAScript6/issues"
   },
-  "homepage": "https://github.com/DestinyJun/ECMAScript6#readme",
-  "type": "module"
+  "homepage": "https://github.com/DestinyJun/ECMAScript6#readme"
 }

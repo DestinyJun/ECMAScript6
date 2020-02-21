@@ -1,0 +1,8 @@
+{
+  "type": "module",
+  "main": "./index.cjs",
+  "exports": {
+    "require": "./index.cjs",
+    "default": "./wrapper.mjs"
+  }
+}
