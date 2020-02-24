@@ -8,7 +8,7 @@
   function minus (x, y) {
     console.log (x - y);
   }
-  // add.call (minus , 1, 1);    //2
+  add.call (minus , 1, 1);    //2
   /**
    * 这个例子中的意思就是用 add 的函数操作来替换 minus的函数操作，add.call(minus ,1,1) == add(1,1) ，所以运行结果为：console.log (2);
    * 注意：js 中的函数其实是对象，函数名是对 Function 对象的引用。
@@ -35,6 +35,6 @@
 
     var myfunc3 = new myfunc2();
     myfunc3.myTxt('Geing'); // i am Geing
-    console.log (myfunc3.name);	// Lee
+    // console.log (myfunc3.name);	// Lee
   }
 }
