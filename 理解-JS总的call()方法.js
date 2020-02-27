@@ -1,40 +1,44 @@
 /**
- * call的作用就是把obj1的方法放到obj2上使用，后面的参数代表的是obj1里面的方法需要参数
+ * Function.prototype.call()：方法使用一个指定的 this 值和单独给出的一个或多个参数来调用一个函数
+ * （1）使用 call 方法调用父构造函数实现继承
+ * （2）使用 call 方法调用函数并且重定义函数中this的指向
+ * （3）使用 call 方法调用函数并且不指定第一个参数（argument）
  */
 {
-  function add (x, y) {
-    console.log (x + y);
-  }
-  function minus (x, y) {
-    console.log (x - y);
-  }
-  add.call (minus , 1, 1);    //2
-  /**
-   * 这个例子中的意思就是用 add 的函数操作来替换 minus的函数操作，add.call(minus ,1,1) == add(1,1) ，所以运行结果为：console.log (2);
-   * 注意：js 中的函数其实是对象，函数名是对 Function 对象的引用。
-   * A.call( B,x,y )：就是把A的函数放到B中运行，x 和 y 是A方法的参数。
-   */
-}
-
-/**
- * 用call来实现继承
- */
-{
-  // 用this可以继承myfunc1中的所有方法和属性。
+  // 使用 call 方法调用父构造函数实现继承
   {
-    function myfunc1(){
-      this.name = 'Lee';
-      this.myTxt = function(txt) {
-        console.log( 'i am',txt );
-      }
+    function Product(name, price) {
+      this.name = name;
+      this.price = price;
     }
-
-    function myfunc2(){
-      myfunc1.call(this);
+    function Food(name, price) {
+      Product.call(this, name, price);
+      this.category = 'food';
     }
+    // console.log(new Food('cheese', 5).name);
+  }
 
-    var myfunc3 = new myfunc2();
-    myfunc3.myTxt('Geing'); // i am Geing
-    // console.log (myfunc3.name);	// Lee
+  // 使用 call 方法调用函数并且重定义函数中this的指向
+  {
+    function greet() {
+      var reply = [this.animal, 'typically sleep between', this.sleepDuration].join(' ');
+      console.log(reply);
+    }
+    var obj = {
+      animal: 'cats', sleepDuration: '12 and 16 hours'
+    };
+    // greet.call(obj);
+  }
+
+  // 使用 call 方法调用函数并且不指定第一个参数（argument）
+  {
+    var sData = 'Wisen';
+    function display() {
+      console.log('sData value is %s ', this.sData);
+    }
+    display.call();  // sData value is Wisen
+    // 在下面的例子中，我们调用了 display 方法，但并没有传递它的第一个参数。如果没有传递第一个参数，
+    // this 的值将会被绑定为全局对象。
   }
 }
+
