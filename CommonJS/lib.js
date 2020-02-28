@@ -4,9 +4,7 @@ function incCounter() {
   counter++;
 }
 module.exports = {
-  get counter() {
-    return counter
-  },
+  counter: counter,
   incCounter: incCounter,
 };
 // 上面代码中，输出的counter属性实际上是一个取值器函数。
