@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "dependencies": {
+    "co": "^4.6.0",
     "esm": "^3.2.25",
     "jquery": "^3.4.1",
     "node-fetch": "^2.6.0",
+    "superagent": "^5.2.2",
     "thunkify": "^2.1.2"
   },
   "devDependencies": {},
