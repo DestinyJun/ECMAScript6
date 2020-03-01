@@ -1,7 +1,10 @@
-var a = [1,2,3];
-let b = a.reduce((accumulator ,currentValue)=> {
-  console.log(accumulator);
-  // console.log(currentValue);
-  return accumulator + currentValue
-});
-// console.log(b);
+{
+  let unusued = 'I have no purpose!';
+
+  function greet() {
+    const message = 'Hello, World!';
+    alert(message);
+  }
+
+  greet();
+}

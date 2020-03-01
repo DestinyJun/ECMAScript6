@@ -442,3 +442,29 @@
     // 上面代码的mix函数，可以将多个对象合成为一个类。使用的时候，只要继承这个类即可。
   }
 }
+
+{
+  class A {
+    constructor() {
+      this.x = 1;
+    }
+    print() {
+      console.log(this.x);
+    }
+  }
+
+  class B extends A {
+    constructor() {
+      super();
+      this.x = 2;
+    }
+    m() {
+      // super.print();
+      console.log(this.x);
+    }
+  }
+
+  let x = new B();
+  x.print();
+  x.m();
+}
